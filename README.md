@@ -51,16 +51,21 @@ statt einer schwarzen Fläche einen Hinweis an.
 
 ### Als Link statt als Datei
 
-`.github/workflows/pages.yml` veröffentlicht das Spiel über GitHub Pages,
-sobald etwas auf `main` landet. Der Workflow legt die Pages-Site beim
-ersten Durchlauf selbst an, es ist also kein Klick in den
-Pages-Einstellungen nötig — **das Repo muss allerdings öffentlich sein**,
-sonst verweigert GitHub Pages den Dienst (auf dem Free-Plan sind
-Pages-Sites privater Repos nicht verfügbar).
+Weil `index.html` im Wurzelverzeichnis liegt, genügt GitHub Pages im
+Branch-Modus — ein Build-Workflow ist nicht nötig:
 
-Sichtbarkeit umstellen: *Settings → General → Danger Zone → Change
-repository visibility → Make public*. Danach liegt das Spiel unter
-`https://<user>.github.io/<repo>/` und ist ohne Login erreichbar.
+*Settings → Pages → Source: **Deploy from a branch** → Branch `main`,
+Ordner `/ (root)` → Save*
+
+Danach liegt das Spiel unter `https://<user>.github.io/<repo>/` und ist
+ohne Login erreichbar. Jeder Push auf `main` aktualisiert die Seite.
+
+Das Repo muss dafür öffentlich sein; auf dem Free-Plan bedient GitHub
+Pages keine privaten Repos.
+
+Die leere Datei `.nojekyll` schaltet die Jekyll-Verarbeitung ab. Ohne sie
+würde Pages die Dateien durch einen Generator schicken, der hier nichts
+zu tun hat.
 
 ## Steuerung
 
