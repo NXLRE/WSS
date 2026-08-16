@@ -24,6 +24,36 @@ python3 -m http.server 8000
 # dann http://localhost:8000
 ```
 
+## Weitergeben
+
+`index.html` ist ein vollständiges, eigenständiges HTML-Dokument ohne
+externe Abhängigkeiten — kein CDN, keine Bild- oder Audiodateien, keine
+Netzverbindung nötig. Die Datei lässt sich also direkt per Messenger,
+Mail oder AirDrop verschicken und beim Empfänger öffnen.
+
+Für den Versand lohnt sich ein sprechender Dateiname:
+
+```
+cp index.html MORE-Rush.html
+```
+
+Beim Empfänger:
+
+- **Android** — Anhang antippen, „Öffnen mit" → Chrome.
+- **iPhone** — Anhang antippen. Falls nur eine Textvorschau erscheint:
+  Teilen-Symbol → „In Safari öffnen" oder „In Dateien sichern" und die
+  Datei aus der Dateien-App starten.
+- **Desktop** — Datei speichern und per Doppelklick öffnen.
+
+Auf dem Handy wird per Wischgeste gesteuert; Pause, Ton und Vollbild
+liegen als Schaltflächen unten rechts. Ohne JavaScript zeigt die Seite
+statt einer schwarzen Fläche einen Hinweis an.
+
+Wer lieber einen Link verschickt, veröffentlicht das Repo über GitHub
+Pages — dafür muss es öffentlich sein und Pages in den Repo-Einstellungen
+aktiviert werden. Danach liegt das Spiel unter
+`https://<user>.github.io/<repo>/`.
+
 ## Steuerung
 
 | Eingabe | Aktion |
