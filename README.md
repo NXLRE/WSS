@@ -49,10 +49,18 @@ Auf dem Handy wird per Wischgeste gesteuert; Pause, Ton und Vollbild
 liegen als Schaltflächen unten rechts. Ohne JavaScript zeigt die Seite
 statt einer schwarzen Fläche einen Hinweis an.
 
-Wer lieber einen Link verschickt, veröffentlicht das Repo über GitHub
-Pages — dafür muss es öffentlich sein und Pages in den Repo-Einstellungen
-aktiviert werden. Danach liegt das Spiel unter
-`https://<user>.github.io/<repo>/`.
+### Als Link statt als Datei
+
+`.github/workflows/pages.yml` veröffentlicht das Spiel über GitHub Pages,
+sobald etwas auf `main` landet. Der Workflow legt die Pages-Site beim
+ersten Durchlauf selbst an, es ist also kein Klick in den
+Pages-Einstellungen nötig — **das Repo muss allerdings öffentlich sein**,
+sonst verweigert GitHub Pages den Dienst (auf dem Free-Plan sind
+Pages-Sites privater Repos nicht verfügbar).
+
+Sichtbarkeit umstellen: *Settings → General → Danger Zone → Change
+repository visibility → Make public*. Danach liegt das Spiel unter
+`https://<user>.github.io/<repo>/` und ist ohne Login erreichbar.
 
 ## Steuerung
 
