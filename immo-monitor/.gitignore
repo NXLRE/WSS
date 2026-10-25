@@ -1,0 +1,4 @@
+config.toml
+*.sqlite
+out/
+__pycache__/
