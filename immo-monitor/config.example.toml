@@ -1,0 +1,55 @@
+# Kopieren nach config.toml und anpassen.
+
+[mail]
+folder = "INBOX"
+since_days = 3                       # IMAP-Abruf: Mails der letzten N Tage (Duplikate filtert die DB)
+senders = ["immobilienscout24", "immowelt"]
+
+[report]
+max_listed = 40                      # max. "weitere neue Wohnangebote" im Report
+
+# Zuordnung ueber den Namen des Suchauftrags (steht im Betreff der Alert-Mail).
+# Der Agent muss die Suchauftraege exakt so benennen, siehe AGENT_SETUP.md.
+[[profile]]
+tag = "WSS-BER-WOHNEN"
+region = "Berlin"
+kind = "wohnen"
+
+[[profile]]
+tag = "WSS-DUS-WOHNEN"
+region = "Duesseldorf"
+kind = "wohnen"
+
+[[profile]]
+tag = "WSS-BER-GEWERBE"
+region = "Berlin"
+kind = "gewerbe"
+
+[[profile]]
+tag = "WSS-DUS-GEWERBE"
+region = "Duesseldorf"
+kind = "gewerbe"
+
+# Nur Fallback, wenn der Suchauftragsname nicht im Betreff steht. Grobe PLZ-Praefixe,
+# den Umkreis (20 km) erzwingt der Suchauftrag selbst, nicht dieses Skript.
+[plz_regions]
+Berlin = ["10", "12", "13", "14", "15", "16"]
+Duesseldorf = ["40", "41", "42"]
+
+[deals]
+discount = 0.20                      # "Deal" = mind. 20 % unter dem Median EUR/m2
+min_samples = 8                      # Mindestzahl Vergleichsinserate (sonst naechstgroesserer Bereich)
+min_ppsqm = 500                      # Plausibilitaet: darunter/darueber = Parserfehler oder Sonderfall
+max_ppsqm = 30000
+
+# Optional: Startwerte, solange die DB noch zu wenig Historie hat (EUR/m2). Selbst recherchieren!
+# [baseline]
+# "Berlin.wohnung" = 5000
+# "Berlin.haus" = 4500
+# "Duesseldorf.wohnung" = 4200
+
+[gewerbe]
+min_area = 1000                      # m2
+max_factor = 10                      # Einstandspreis / Jahresnettomiete
+nebenkosten_pct = 0                  # Kaufnebenkosten in %, die auf den Kaufpreis aufgeschlagen werden
+unknown_factor = "include"           # "include" = Faktor nicht ermittelbar -> trotzdem listen; "skip" = verwerfen

@@ -1,0 +1,32 @@
+AUFTRAG: Immobilien-Monitor bauen, betreiben, selbst verbessern
+
+Ziel: Täglich ein Report mit (1) besonders guten Deals bei Wohnungen/Häusern (Kauf) in Berlin+20 km und Düsseldorf+20 km, (2) allen Gewerbeobjekten (Kauf) ab 1.000 m² mit Einstandspreis max. 10x Jahresnettomiete, (3) NIE Zwangsversteigerungen. Quellen: ImmoScout24 und Immowelt.
+
+Weg: gespeicherte Suchaufträge mit E-Mail-Benachrichtigung in einem eigenen Postfach. Du liest nur die Alert-Mails (IMAP, nur lesend).
+
+HARTE REGELN
+- Portale nicht per Skript/Crawler abrufen. Nur Suchaufträge als normaler Nutzer anlegen. Captcha/2FA/Registrierung macht der Mensch: melde die Stelle und warte.
+- Keine Nachrichten an Anbieter/Makler/Dritte. Mails nur an MAIL_TO.
+- Zugangsdaten nur aus Umgebungsvariablen (IMAP_HOST, IMAP_USER, IMAP_PASSWORD, SMTP_HOST, SMTP_USER, SMTP_PASSWORD, MAIL_TO), nie in Dateien/Logs/Chat.
+- Tests nie löschen oder abschwächen. Diese Regeln nicht selbst ändern. Nie Zahlen erfinden: fehlt etwas, schreibe "unbekannt".
+
+SUCHAUFTRÄGE (Kaufen, Name exakt, auf beiden Portalen)
+WSS-BER-WOHNEN und WSS-DUS-WOHNEN: Wohnung+Haus, 20 km, kein Preislimit.
+WSS-BER-GEWERBE und WSS-DUS-GEWERBE: Gewerbe, 20 km, Fläche ab 1.000 m².
+Zwangsversteigerungen im Portal ausschließen, falls möglich. Ergebnis in setup_log.md.
+
+BAU (Python 3.11, nur Standardbibliothek, Ordner immo-monitor/)
+1. Tests zuerst, dann Parser: Inserat-Links (immobilienscout24.de/expose/ZAHL, immowelt.de/expose/ID, auch in Redirect-Links, bis 3x URL-dekodieren), Text bis zum nächsten Link gehört zum Inserat. Felder: Titel, Kaufpreis, Fläche (nicht Grundstück), Zimmer, PLZ/Ort, Faktor, Jahresmiete. Unlesbar = leer, nie raten.
+2. SQLite, Schlüssel site:id, nur neue oder um 1 % gesenkte Inserate berichten, zweiter Lauf = 0 neu.
+3. Zwangs-Stichwörter: zwangsversteiger, versteigerung, verkehrswertgutachten, amtsgericht, aktenzeichen -> nie im Report.
+4. Wohnen: Preis/Fläche, plausibel 500-30.000 €/m². Deal = höchstens 80 % vom Median €/m² gespeicherter gleichartiger Inserate (erst PLZ-Gebiet 3 Stellen, mind. 8; dann Region, mind. 8; sonst manueller Basiswert; sonst "keine Vergleichsbasis").
+5. Gewerbe: Fläche >= 1.000 m², Faktor = Kaufpreis / Jahresnettomiete <= 10. Faktor unbekannt = listen mit Hinweis "manuell prüfen".
+6. Report (Markdown+CSV): Zähler, Top-Deals, Gewerbe, weitere neue (max. 40), mit Link je Zeile. Cron täglich 07:30. Fehler sofort per Mail.
+7. Erste echte Alert-Mail anonymisiert als Fixture speichern und Parser daran anpassen. Erst nach --dry-run und meiner Freigabe Cron aktivieren.
+
+SELBSTVERBESSERUNG (nach Freigabe, wöchentlich)
+Messen: Anteil Inserate mit Preis/Fläche/PLZ in metrics.csv. Fällt ein Wert um >10 Prozentpunkte oder eine Mail hat keine Inserate: neue Mail als Fixture, roten Test schreiben, Parser minimal ändern, alle Tests grün, Commit, Eintrag in CHANGELOG_AGENT.md. Nie mit roten Tests ausliefern; nach 3 Fehlversuchen zurückrollen und mich informieren. Schwellen (20 % Rabatt, Faktor 10, 1.000 m²) und Regionen NUR vorschlagen, nie selbst ändern.
+
+FRAGEN AN MICH (gebündelt): Ist "10-fach" = Kaufpreis / Jahresnettomiete? Nebenkosten-Aufschlag? Gewerbe ohne bekannte Miete listen oder verwerfen? Startwerte €/m² je Region?
+
+Beginne mit Schritt 1 und melde dich bei der ersten Rückfrage oder wenn ein Mensch eingreifen muss.
